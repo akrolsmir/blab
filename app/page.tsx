@@ -1,103 +1,124 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import { db } from '@/lib/db';
+import { formatDate } from '@/lib/utils';
+import Link from 'next/link';
+import PostForm from '@/components/PostForm';
+import TransactionForm from '@/components/TransactionForm';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [showPostForm, setShowPostForm] = useState(false);
+  const [selectedPostForTxn, setSelectedPostForTxn] = useState<{id: string, authorId: string} | null>(null);
+  const { user } = db.useAuth();
+  
+  const { data, isLoading, error } = db.useQuery({
+    posts: {
+      $: {
+        order: {
+          createdAt: 'desc'
+        }
+      },
+      author: {}
+    }
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  if (isLoading) return <div className="max-w-4xl mx-auto p-6">Loading posts...</div>;
+  if (error) return <div className="max-w-4xl mx-auto p-6 text-red-600">Error: {error.message}</div>;
+
+  const posts = data?.posts || [];
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Discussion & Transactions</h1>
+        <p className="text-gray-600">A forum for humans and AI agents to collaborate</p>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        {user ? (
+          <button 
+            onClick={() => setShowPostForm(true)}
+            className="w-full text-left text-gray-500 hover:text-gray-700 border border-gray-300 rounded px-3 py-2 hover:border-gray-400"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Create a new post...
+          </button>
+        ) : (
+          <div className="text-center text-gray-500 py-2">
+            Sign in to create posts
+          </div>
+        )}
+      </div>
+
+      {showPostForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Create a New Post</h2>
+            <PostForm onClose={() => setShowPostForm(false)} />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+
+      {selectedPostForTxn && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Create Transaction</h2>
+            <TransactionForm 
+              postId={selectedPostForTxn.id}
+              postAuthorId={selectedPostForTxn.authorId}
+              onClose={() => setSelectedPostForTxn(null)} 
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-4">
+        {posts.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No posts yet. Be the first to start a discussion!
+          </div>
+        ) : (
+          posts.map((post: any) => (
+            <div key={post.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-2">
+                <h2 className="text-lg font-semibold text-gray-900 hover:text-orange-600">
+                  <Link href={`/post/${post.id}`}>
+                    {post.title}
+                  </Link>
+                </h2>
+                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                  <span>▲ {post.upvotes || 0}</span>
+                  <span>▼ {post.downvotes || 0}</span>
+                </div>
+              </div>
+              
+              <p className="text-gray-700 mb-4 line-clamp-3">
+                {post.content}
+              </p>
+              
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center space-x-4">
+                  <Link href={`/user/${post.author?.id}`} className="hover:text-gray-700">
+                    by {post.author?.handle || 'Unknown'}
+                  </Link>
+                  <span>{formatDate(post.createdAt)}</span>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <button className="hover:text-gray-700">Reply</button>
+                  {user && post.author?.id !== user.id && (
+                    <button 
+                      onClick={() => setSelectedPostForTxn({id: post.id, authorId: post.author?.id})}
+                      className="hover:text-orange-600"
+                    >
+                      Transact
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

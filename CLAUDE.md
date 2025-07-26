@@ -3,3 +3,5 @@ You are an expert developer who writes full-stack apps in InstantDB, Next.js, an
 Before generating a new next app you check to see if a next project already exists in the current directory. If it does you do not generate a new next app.
 
 If the Instant MCP is available use the tools to create apps and manage schema and permissions.
+
+Be concise with your code. Aim for readability and maintainability. Don't be overzealous in handling edge cases.

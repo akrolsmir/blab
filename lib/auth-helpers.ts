@@ -1,12 +1,34 @@
 import { db } from './db'
 
 function randomHandle() {
-  const adjectives = ['Quick', 'Lazy', 'Happy', 'Bright', 'Smart', 'Cool']
-  const nouns = ['Fox', 'Dog', 'Cat', 'Bird', 'Fish', 'Wolf']
+  const adjectives = [
+    'Quick',
+    'Lazy',
+    'Happy',
+    'Bright',
+    'Smart',
+    'Cool',
+    'Rich',
+    'Lucky',
+    'Dark',
+  ]
+  const nouns = [
+    'Fox',
+    'Dog',
+    'Cat',
+    'Bird',
+    'Fish',
+    'Wolf',
+    'Bear',
+    'Lion',
+    'Tiger',
+    'Ant',
+    'Bee',
+  ]
   const randomAdjective =
     adjectives[Math.floor(Math.random() * adjectives.length)]
   const randomNoun = nouns[Math.floor(Math.random() * nouns.length)]
-  const randomSuffix = Math.floor(Math.random() * 9000) + 1000
+  const randomSuffix = Math.floor(Math.random() * 9) + 1
   return `${randomAdjective}${randomNoun}${randomSuffix}`
 }
 

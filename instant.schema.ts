@@ -1,4 +1,4 @@
-import { i } from '@instantdb/react';
+import { i } from '@instantdb/react'
 
 const _schema = i.schema({
   entities: {
@@ -21,7 +21,6 @@ const _schema = i.schema({
       amount: i.number(),
       type: i.string(),
       description: i.string(),
-      status: i.string(),
       createdAt: i.number().indexed(),
       completedAt: i.number().optional(),
     }),
@@ -48,11 +47,11 @@ const _schema = i.schema({
       reverse: { on: 'posts', has: 'many', label: 'txns' },
     },
   },
-});
+})
 
-type _AppSchema = typeof _schema;
+type _AppSchema = typeof _schema
 interface AppSchema extends _AppSchema {}
-const schema: AppSchema = _schema;
+const schema: AppSchema = _schema
 
-export type { AppSchema };
-export default schema;
+export type { AppSchema }
+export default schema

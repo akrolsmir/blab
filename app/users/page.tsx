@@ -33,7 +33,6 @@ export default function UsersPage() {
           amount: Number(amount),
           type: 'transfer',
           description: `Transfer from ${fromUser} to ${toUser}`,
-          status: 'pending',
           createdAt: Date.now(),
         })
         .link({ fromUser, toUser })

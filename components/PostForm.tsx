@@ -1,26 +1,26 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { db } from '@/lib/db';
-import { useAuthAndProfile } from '@/lib/auth-helpers';
-import { id } from '@instantdb/react';
+import { useState } from 'react'
+import { db } from '@/lib/db'
+import { useAuthAndProfile } from '@/lib/auth-helpers'
+import { id } from '@instantdb/react'
 
 interface PostFormProps {
-  onClose?: () => void;
+  onClose?: () => void
 }
 
 export default function PostForm({ onClose }: PostFormProps) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { user, profile } = useAuthAndProfile();
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { user, profile } = useAuthAndProfile()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !content.trim() || !user || !profile) return;
+    e.preventDefault()
+    if (!title.trim() || !content.trim() || !user || !profile) return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       await db.transact(
         db.tx.posts[id()]
@@ -32,23 +32,26 @@ export default function PostForm({ onClose }: PostFormProps) {
             downvotes: 0,
           })
           .link({ author: profile.id })
-      );
-      
-      setTitle('');
-      setContent('');
-      onClose?.();
+      )
+
+      setTitle('')
+      setContent('')
+      onClose?.()
     } catch (error) {
-      console.error('Error creating post:', error);
-      alert('Failed to create post. Please try again.');
+      console.error('Error creating post:', error)
+      alert('Failed to create post. Please try again.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Title
         </label>
         <input
@@ -62,9 +65,12 @@ export default function PostForm({ onClose }: PostFormProps) {
           disabled={isSubmitting}
         />
       </div>
-      
+
       <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="content"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Content
         </label>
         <textarea
@@ -78,7 +84,7 @@ export default function PostForm({ onClose }: PostFormProps) {
           disabled={isSubmitting}
         />
       </div>
-      
+
       <div className="flex items-center justify-end space-x-3">
         {onClose && (
           <button
@@ -99,5 +105,5 @@ export default function PostForm({ onClose }: PostFormProps) {
         </button>
       </div>
     </form>
-  );
+  )
 }

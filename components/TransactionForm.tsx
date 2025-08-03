@@ -1,41 +1,46 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { db } from '@/lib/db';
-import { useAuthAndProfile } from '@/lib/auth-helpers';
-import { formatCurrency } from '@/lib/utils';
-import { id } from '@instantdb/react';
+import { useState } from 'react'
+import { db } from '@/lib/db'
+import { useAuthAndProfile } from '@/lib/auth-helpers'
+import { formatCurrency } from '@/lib/utils'
+import { id } from '@instantdb/react'
 
 interface TransactionFormProps {
-  postId?: string;
-  postAuthorId?: string;
-  onClose: () => void;
+  postId?: string
+  postAuthorId?: string
+  onClose: () => void
 }
 
-export default function TransactionForm({ postId, postAuthorId, onClose }: TransactionFormProps) {
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const [type, setType] = useState<'bet' | 'bounty' | 'investment'>('bet');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { user, profile } = useAuthAndProfile();
+export default function TransactionForm({
+  postId,
+  postAuthorId,
+  onClose,
+}: TransactionFormProps) {
+  const [amount, setAmount] = useState('')
+  const [description, setDescription] = useState('')
+  const [type, setType] = useState<'bet' | 'bounty' | 'investment'>('bet')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { user, profile } = useAuthAndProfile()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!amount || !description.trim() || !user || !profile || !postAuthorId) return;
+    e.preventDefault()
+    if (!amount || !description.trim() || !user || !profile || !postAuthorId)
+      return
 
-    const amountNum = parseFloat(amount);
+    const amountNum = parseFloat(amount)
     if (isNaN(amountNum) || amountNum <= 0) {
-      alert('Please enter a valid amount');
-      return;
+      alert('Please enter a valid amount')
+      return
     }
 
     if (amountNum > (profile.balance || 0)) {
-      alert('Insufficient balance');
-      return;
+      alert('Insufficient balance')
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       await db.transact([
         // Create transaction
@@ -47,27 +52,27 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
             status: 'pending',
             createdAt: Date.now(),
           })
-          .link({ 
+          .link({
             fromUser: profile.id,
             toUser: postAuthorId,
-            ...(postId && { post: postId })
+            ...(postId && { post: postId }),
           }),
         // Update sender balance
         db.tx.profiles[profile.id].update({
-          balance: (profile.balance || 0) - amountNum
-        })
-      ]);
-      
-      setAmount('');
-      setDescription('');
-      onClose();
+          balance: (profile.balance || 0) - amountNum,
+        }),
+      ])
+
+      setAmount('')
+      setDescription('')
+      onClose()
     } catch (error) {
-      console.error('Error creating transaction:', error);
-      alert('Failed to create transaction. Please try again.');
+      console.error('Error creating transaction:', error)
+      alert('Failed to create transaction. Please try again.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,8 +83,16 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
         <div className="flex space-x-4">
           {[
             { value: 'bet', label: 'Place Bet', desc: 'Wager on outcome' },
-            { value: 'bounty', label: 'Offer Bounty', desc: 'Pay for task completion' },
-            { value: 'investment', label: 'Invest', desc: 'Support this project' }
+            {
+              value: 'bounty',
+              label: 'Offer Bounty',
+              desc: 'Pay for task completion',
+            },
+            {
+              value: 'investment',
+              label: 'Invest',
+              desc: 'Support this project',
+            },
           ].map((option) => (
             <label key={option.value} className="flex items-center">
               <input
@@ -97,9 +110,12 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
           ))}
         </div>
       </div>
-      
+
       <div>
-        <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="amount"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Amount ({formatCurrency(profile?.balance || 0)} available)
         </label>
         <input
@@ -115,9 +131,12 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
           disabled={isSubmitting}
         />
       </div>
-      
+
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Description
         </label>
         <textarea
@@ -131,7 +150,7 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
           disabled={isSubmitting}
         />
       </div>
-      
+
       <div className="flex items-center justify-end space-x-3 pt-4">
         <button
           type="button"
@@ -146,9 +165,11 @@ export default function TransactionForm({ postId, postAuthorId, onClose }: Trans
           className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting || !amount || !description.trim()}
         >
-          {isSubmitting ? 'Processing...' : `Create ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+          {isSubmitting
+            ? 'Processing...'
+            : `Create ${type.charAt(0).toUpperCase() + type.slice(1)}`}
         </button>
       </div>
     </form>
-  );
+  )
 }

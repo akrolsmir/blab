@@ -22,7 +22,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     setIsLoading(true)
     setError('')
-    
+
     try {
       await db.auth.sendMagicCode({ email })
       setStep('code')
@@ -40,7 +40,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     setIsLoading(true)
     setError('')
-    
+
     try {
       await db.auth.signInWithMagicCode({ email, code })
       setSuccess('Signed in successfully!')
@@ -99,7 +99,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {step === 'email' ? (
           <form onSubmit={handleSendCode}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -124,7 +127,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         ) : (
           <form onSubmit={handleSignIn}>
             <div className="mb-4">
-              <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="code"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Magic Code
               </label>
               <input

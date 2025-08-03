@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "push-schema": "bunx instant-cli@latest push schema",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@instantdb/react": "^0.20.12",
@@ -17,11 +19,12 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "prettier": "3.6.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

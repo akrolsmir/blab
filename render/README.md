@@ -1,21 +1,15 @@
-# bun-react-tailwind-template
+# yield v2
 
-To install dependencies:
+instant codegen demo with gpt-oss, cerebras, and bun
 
-```bash
-bun install
-```
+TODO:
 
-To start a development server:
+- Store generated code? (on InstantDB?)
+- Deploy (to Fly or Render?)
 
-```bash
-bun dev
-```
+Principles:
 
-To run for production:
-
-```bash
-bun start
-```
-
-This project was created using `bun init` in bun v1.2.18. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- When codegen is instant, what does that unlock?
+  - metaphor: swimming through possibility-space of frontends
+  - generation is cheap, human validation is expensive
+  - if the output is bad, rewrite or retry rather than iterate?

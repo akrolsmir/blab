@@ -16,7 +16,6 @@ export async function generateCerebras(prompt: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // DO NOT COMMIT
       Authorization: `Bearer ${process.env.CEREBRAS_API_KEY}`,
     },
     body: JSON.stringify({

@@ -1,3 +1,6 @@
+# temp files
+temp
+
 # dependencies (bun install)
 node_modules
 

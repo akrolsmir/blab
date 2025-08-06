@@ -1,6 +1,7 @@
 import { serve } from 'bun'
 import index from './index.html'
 import { compileReact } from './buni-render'
+import { generateCerebras } from './cerebras'
 
 const server = serve({
   routes: {
@@ -12,7 +13,13 @@ const server = serve({
       const body = await req.json()
       const { jsx } = body
       return compileReact(jsx)
-      // return renderToHtml(jsx)
+    },
+
+    '/api/generate': async (req) => {
+      const body = await req.json()
+      const { prompt } = body
+      const jsx = await generateCerebras(prompt)
+      return compileReact(jsx)
     },
   },
 

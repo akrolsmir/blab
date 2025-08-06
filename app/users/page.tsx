@@ -72,7 +72,7 @@ export default function UsersPage() {
             </p>
           </div>
           <button
-            className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+            className="ring-2 ring-blue-500 px-4 py-2 hover:bg-blue-50"
             onClick={() =>
               createTxn({
                 amount: 100,

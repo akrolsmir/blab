@@ -22,7 +22,6 @@ const _schema = i.schema({
       type: i.string(),
       description: i.string(),
       createdAt: i.number().indexed(),
-      completedAt: i.number().optional(),
     }),
   },
   links: {

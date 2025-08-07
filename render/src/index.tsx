@@ -19,7 +19,7 @@ const server = serve({
       const body = await req.json()
       const { prompt } = body
       const jsx = await generateCerebras(prompt)
-      return compileReact(jsx)
+      return new Response(jsx)
     },
   },
 

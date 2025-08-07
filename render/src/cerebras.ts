@@ -8,6 +8,20 @@ Use typescript, TSX syntax, and Tailwind for styling the app.
 
 Your code MUST be wrapped in <output></output> tags, and contain "export default function App() { ... }".
 
+Example output:
+<output>
+import React, { useState } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return <div>
+    <h1 className="text-2xl font-bold">Count: {count}</h1>
+    <button className="bg-blue-500 text-white p-2 rounded-md" onClick={() => setCount(count + 1)}>Increment</button>
+  </div>;
+}
+</output>
+
 Here is the user's prompt:
 `
 
@@ -31,7 +45,7 @@ export async function generateCerebras(prompt: string) {
   })
   const data = await response.json()
   const content = data.choices[0].message.content
-  console.log('content', content)
+  // console.log('content', content)
   return extract(content)
 }
 

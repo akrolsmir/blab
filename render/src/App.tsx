@@ -28,11 +28,15 @@ export function App() {
   return (
     <div className="">
       {/* Two panes: left has prompt, right has the app */}
-      <div className="flex flex-row w-full gap-2">
-        <div className="w-1/2">
-          <h1>Prompt</h1>
+      <div className="flex flex-row w-full">
+        <div className="w-1/2 p-2">
+          <textarea
+            className="w-full h-48 border-1 border-gray-300 rounded-md p-2"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
           <button
-            className="bg-blue-100 p-2 hover:bg-blue-200"
+            className="bg-blue-100 p-2 hover:bg-blue-200 rounded-md float-right"
             onClick={async () => {
               const jsx = await generateJsx(prompt)
               setJsx(jsx)
@@ -42,13 +46,7 @@ export function App() {
             Generate App
           </button>
           <textarea
-            className="w-full h-48 border-2 border-gray-300 rounded-md p-2"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-          />
-          <h1>App Text</h1>
-          <textarea
-            className="w-full h-96 border-2 border-gray-300 rounded-md p-2"
+            className="w-full mt-6 h-96 border-1 border-gray-300 rounded-md p-2"
             value={jsx}
             onChange={(e) => setJsx(e.target.value)}
           />

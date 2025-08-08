@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './index.css'
+// import './index.css'
 
 const PROMPT_EXAMPLE = `Make a simple Todo list app.`
 

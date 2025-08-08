@@ -1,12 +1,13 @@
 import { serve } from 'bun'
-import index from './index.html'
 import { compileReact } from './buni-render'
 import { generateCerebras } from './cerebras'
 
 const server = serve({
   routes: {
-    // Serve index.html for all unmatched routes.
-    '/*': index,
+    '/*': async (req) => {
+      const jsx = await Bun.file('./src/App.tsx').text()
+      return compileReact(jsx)
+    },
 
     // Given a prompt that's a jsx string, render as standalone html with bun and serve that
     '/api/render': async (req) => {

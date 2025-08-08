@@ -23,6 +23,7 @@ const server = serve({
     },
   },
 
+  // Seems like "development: true" is needed for bun build?
   development: process.env.NODE_ENV !== 'production' && {
     // Enable browser hot reloading in development
     hmr: true,

@@ -22,7 +22,8 @@ async function compileReact(jsx: string) {
 // Like Claude Artifacts, let the user type in a prompt and build a micro react webapp for it.
 export function App() {
   const [prompt, setPrompt] = useState(PROMPT_EXAMPLE)
-  const [jsx, setJsx] = useState('')
+  // note: don't use jsx as a variable name, it clobbers the global jsx variable
+  const [appJsx, setAppJsx] = useState('')
   const [html, setHtml] = useState('')
 
   return (
@@ -38,17 +39,17 @@ export function App() {
           <button
             className="bg-blue-100 p-2 hover:bg-blue-200 rounded-md float-right"
             onClick={async () => {
-              const jsx = await generateJsx(prompt)
-              setJsx(jsx)
-              setHtml(await compileReact(jsx))
+              const appJsx = await generateJsx(prompt)
+              setAppJsx(appJsx)
+              setHtml(await compileReact(appJsx))
             }}
           >
             Generate App
           </button>
           <textarea
             className="w-full mt-6 h-96 border-1 border-gray-300 rounded-md p-2"
-            value={jsx}
-            onChange={(e) => setJsx(e.target.value)}
+            value={appJsx}
+            onChange={(e) => setAppJsx(e.target.value)}
           />
         </div>
         <div className="w-1/2">
